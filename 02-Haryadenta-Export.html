@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tugas Export</title>
+	<style>
+	input{ background-color: aqua;
+	}
+	form{
+				width: 55%;
+				margin: auto;
+				border-radius: 15px;
+				opacity: 0.5;
+				 
+				}
+	.atas{
+				border:1px solid black;
+				 display: inline-block;
+				 text-align: center;
+				 padding-left:300px;
+				padding-right:200px;
+				}
+	.sbmt{ 
+				 background-color: #00FF00;
+				  box-shadow: 1px #00AF00;
+	}
+	.rst{ 
+				 background-color:  #FF0000;
+				  box-shadow: 1px #AF0000;
+	}
+	button{
+	
+			 background-color: #C1FC2F;
+				  box-shadow: 1px #E5FFB2;
+	}
+	</style>
+</head>
+<body>
+	<form name="biodata" method="POST">
+        <fieldset>
+        <legend>Data Kelas XII MM2</legend>
+        <p>
+            <label>NIS:</label>
+            <input type="number" name="nis" id="val_nis" placeholder="Masukkan NIS Anda.." />
+        </p>
+        <p>
+            <label>NAMA:</label>
+            <input type="text" name="nama" id="val_nama" placeholder="Masukkan NAMA Anda..." />
+        </p>
+        <p>
+            <label>Tempat Lahir:</label>
+            <input type="text" name="tempat" id="val_tempat" placeholder="Masukkan TEMPAT Anda..."/>
+        </p>
+        <p>
+			<label>Tanggal Lahir:</label>
+            <input type="date" name="tanggal" id="val_tanggal" />
+        </p>
+        <p> 
+         <label>Agama:</label> 
+              <select name="agama"> 
+                  <option value="islam">Islam</option> 
+                  <option value="kristen">Kristen</option> 
+                  <option value="hindu">Hindu</option> 
+                  <option value="budha">Budha</option> </select> 
+        </p>
+        <p> <label>Jenis kelamin:</label> 
+		<label>
+		<input type="radio" name="kelamin" value="laki-laki" /> Laki-laki</label>
+		<label>
+		<input type="radio" name="kelamin" value="perempuan" /> Perempuan</label> </p>
+		 <label>Alamat:</label>
+            <textarea name="alamat" id="val_alamat"></textarea>
+        </p>
+		<p>
+		<label>uang saku Rp:</label>
+		<input type="number" name="uang" id="ipt_uang">
+		</p>
+		<p>
+		<label>Uang Saku Selama 25 hari Rp:</label>
+		<input type="number" name="uangku" id="opt_jadi" disabeled placeholder="Jangan Di Isi">  
+		</p>
+		<input class="sbmt" type="button" onclick="kiriminput()" name="submit" value="Send" />
+		<input class="rst" type="reset" onclick="menghapus()" name="restar" value="Reset" />
+		</p>
+<button onclick="exportTableToExcel('tabelinput')">Export</button>
+    </form>
+	<br>
+	<table border="1" id="tabelinput">
+		<tr>
+			<td>NIS</td>
+			<td>NAMA</td>
+			<td>TEMPAT LAHIR</td>
+			<td>TANGGAL LAHIR</td>
+			<td>AGAMA</td>
+			<td>JENIS KELAMIN</td>
+			<td>UANG SAKU</td>
+			<td>UANG SAKU SELAMA 25 Hari</td>
+			<td>ALAMAT</td>
+		</tr>
+	</table>
+	
+	<script>
+	function exportTableToExcel(tabelinput, filename = ''){
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tabelinput);
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+    filename = filename?filename+'.xls':'excel_data.xls';
+    
+    downloadLink = document.createElement("a");
+    
+    document.body.appendChild(downloadLink);
+    
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['\ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+    
+        downloadLink.download = filename;
+        
+        downloadLink.click();
+    }
+}
+	
+	var uang; 
+    var jadi;
+	
+		function kiriminput() {
+		    
+		    uang = parseFloat(document.getElementById("ipt_uang").value);
+			jadi = 25 * (uang); 		
+			document.getElementById('opt_jadi').value = jadi;
+		    
+			var u=document.forms['biodata'] ['nis'].value;
+			var x=document.forms['biodata'] ['nama'].value;
+			var y=document.forms['biodata'] ['tempat'].value;
+			var z=document.forms['biodata'] ['tanggal'].value;
+			var f=document.forms['biodata'] ['agama'].value;
+			var k=document.forms['biodata'] ['kelamin'].value;
+			var g=document.forms['biodata'] ['uang'].value;
+			var h=document.forms['biodata'] ['uangku'].value;
+			var i=document.forms['biodata'] ['alamat'].value;
+			
+			if(u==null || u=="")
+			{
+				document.getElementById("val_nis").innerHTML="Isi Kolom NIS";
+				if(x==null || x=="")
+				{
+					document.getElementById("val_nama").innerHTML="Isi Kolom NAMA";
+				}else{
+					document.getElementById("val_nama").innerHTML="Sudah Benar";
+				}
+			}else{
+				document.getElementById("val_nis").innerHTML="Sudah Benar";
+				if(x==null || x=="")
+				{
+					document.getElementById("val_nama").innerHTML="Isi Kolom NAMA";
+				}else{
+					document.getElementById("val_nama").innerHTML="Sudah Benar";
+					
+							
+					var tabel = document.getElementById("tabelinput")
+					var row=tabel.insertRow(1);
+					var cell1 =row.insertCell(0);
+					var cell2 =row.insertCell(1);
+					var cell3 =row.insertCell(2);
+					var cell4 =row.insertCell(3);
+					var cell5 =row.insertCell(4);
+					var cell6 =row.insertCell(5);
+					var cell7 =row.insertCell(6);
+					var cell8 =row.insertCell(7);
+					var cell9 =row.insertCell(8);
+					
+					cell1.innerHTML=u;
+					cell2.innerHTML=x;
+					cell3.innerHTML=y;
+					cell4.innerHTML=z;
+					cell5.innerHTML=f;
+					cell6.innerHTML=k;
+					cell7.innerHTML=g;
+					cell8.innerHTML=h;
+					cell9.innerHTML=i;
+				}	
+			}
+		}
+	</script>
+	
+	
+</body>
+</html>
